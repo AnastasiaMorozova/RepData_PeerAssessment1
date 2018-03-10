@@ -6,10 +6,11 @@ title: "Report"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Read the data 
+## Loading and preprocessing the data
 
 ```{r}
 ActivityData<-read.csv(file="activity.csv", header=TRUE, sep=",")
+ActivityData$date<-strptime(ActivityData$date,,format='%Y-%m-%d')
 summary(ActivityData)
 ```
 
