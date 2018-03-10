@@ -1,10 +1,16 @@
 ---
 title: "Report"
-output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read the data 
+
+```{r}
+ActivityData<-read.csv(file="activity.csv", header=TRUE, sep=",")
+summary(ActivityData)
 ```
 
 ## R Markdown
