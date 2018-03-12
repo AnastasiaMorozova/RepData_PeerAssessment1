@@ -6,35 +6,49 @@ output:
 ---
 
 
-## Loading and preprocessing the data
-
+## Loading and preprocessing the data  
 This part of the code attaches the dplyr library, reads the data from the .csv file and saves it as the dataframe. For the sake of the futher analysis I change the format of the "date" variable to the POSIXct date format.  
 
 ```{r}
 library(dplyr)
 ActivityData<-read.csv(file="activity.csv", header=TRUE, sep=",")
 ActivityData$date<-as.POSIXct(ActivityData$date,format='%Y-%m-%d')
+summary(ActivityData)
 ```
-
 ## What is mean total number of steps taken per day?
-
+This part of the code creates the dataframe that contains the total and average number of steps taken per day and creates the histogram of the total number of steps. Two horizontal lines define the mean and the median of the total number of steps taken per day. The corresponding values of the mean and the median total number of steps are given after the histogram together with the code generated these statistics.
 ```{r}
 
 # Calcuate the total number of steps taken each day
 DailyActivity<-group_by(ActivityData,ActivityData$date)
-DailySummary<-summarize(DailyActivity,steps=sum(steps,na.rm=TRUE),interval=mean(interval,na.rm=TRUE))
-# Create the histogram
-hist(DailySummary$steps)
+DailySummary<-summarize(DailyActivity,TotalSteps=sum(steps,na.rm=TRUE),AverageSteps=mean(steps,na.rm=TRUE))
+# Create the histogram of the total steps
+hist(DailySummary$TotalSteps,
+     col="peachpuff",
+     border="black",
+     xlab="Number of steps",
+     main="Total number of steps taken per day")
+abline(v=mean(DailySummary$TotalSteps),
+       col="royalblue",
+       lwd=2)
+abline(v=median(DailySummary$TotalSteps),
+       col="red",
+       lwd=2)
+legend(x="topright",
+       c("Mean","Median"),
+       col=c("royalblue","red"),
+       lwd=c(2,2))
+
 ```
 
-
-
+Mean total number of steps:
+```{r}
+mean(DailySummary$TotalSteps)
+```
+Median total number of steps:
+```{r}
+median(DailySummary$TotalSteps)
+```
 ## What is the average daily activity pattern?
 
-
-
-## Imputing missing values
-
-
-
-## Are there differences in activity patterns between weekdays and weekends?
+This part of the code creates the dataframe with the average number of steps taken within particular 5-minute interval, what allows to check average intradaily activity of a person. 
