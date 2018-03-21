@@ -130,7 +130,7 @@ dev.off()
 ![](figures/histogram.png)<!-- -->
   
   
-##Mean total number of steps:
+## Mean total number of steps:
 
 ```r
 mean1<-mean(DailySummary$TotalSteps,na.rm=TRUE)
@@ -138,7 +138,7 @@ mean1<-mean(DailySummary$TotalSteps,na.rm=TRUE)
 9354.2295082
   
   
-##Median total number of steps:
+## Median total number of steps:
 
 ```r
 median1<-median(DailySummary$TotalSteps,na.rm=TRUE)
@@ -189,7 +189,7 @@ dev.off()
 ![](figures/TimeSeriesPlot.png)<!-- -->
   
   
-##The indicator of the 5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps:
+## The indicator of the 5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps:
 
 ```r
 interval<-IntervalMaxSteps[1]
