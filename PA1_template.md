@@ -106,7 +106,7 @@ legend(x="topright",
        lwd=c(2,2))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 
 ```r
 ## copy the histogram to a png file
@@ -127,7 +127,7 @@ dev.off()
 ## png 
 ##   2
 ```
-
+![](figures/histogram.png)<!-- -->
 
 ##Mean total number of steps:
 
@@ -163,7 +163,7 @@ abline(v=IntervalMaxSteps[1],
        lwd=2)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
 
 ```r
 ## copy the histogram to a png file
@@ -184,6 +184,7 @@ dev.off()
 ## png 
 ##   2
 ```
+![](figures/TimeSeriesPlot.png)<!-- -->
 
 ##The indicator of the 5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps:
 
@@ -239,7 +240,7 @@ legend(x="topright",
        lwd=c(2,2))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
 
 ```r
 ## copy the histogram to a png file
@@ -260,6 +261,7 @@ dev.off()
 ## png 
 ##   2
 ```
+![](figures/histogramNew.png)<!-- -->
 
 # Mean total number of steps for the new dataset:
 
@@ -308,7 +310,7 @@ xyplot(IntradailySummary$AverageSteps~IntradailySummary$`ActivityData$interval`|
        xlab='Interval',ylab='Number of Steps')
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
 
 ```r
 ## copy the histogram to a png file
@@ -329,3 +331,4 @@ dev.off()
 ## png 
 ##   2
 ```
+![](figures/WeekPattern.png)<!-- -->
