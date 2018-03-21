@@ -3,14 +3,27 @@ title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
     keep_md: true
----
-
-
+```
 ## Loading and preprocessing the data  
-This part of the code attaches the dplyr library, reads the data from the .csv file and saves it as the dataframe. For the sake of the futher analysis I change the format of the "date" variable to the POSIXct date format.  
-
+This part of the code attaches the dplyr library, reads the data from the .csv file and saves it as the dataframe. For the sake of the futher analysis I change the format of the "date" variable to the POSIXct date format. 
 ```{r}
+# set working directories and load necessary libraries
+setwd("C:\\Users\\frost\\Documents\\DataScience")
 library(dplyr)
+library(lattice)
+
+
+## download file if it doesn't exist yet
+fileUrl <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
+if (!file.exists("activity.zip")){
+  download.file(fileUrl,destfile="activity.zip")	
+}
+# get the name of the only zip file in the folder
+fname<-dir(pattern="\\.zip$")
+# unzip file
+unzip(fname,exdir = "C:\\Users\\frost\\Documents\\DataScience")
+
+
 ActivityData<-read.csv(file="activity.csv", header=TRUE, sep=",")
 ActivityData$date<-as.POSIXct(ActivityData$date,format='%Y-%m-%d')
 summary(ActivityData)
@@ -21,7 +34,7 @@ This part of the code creates the dataframe that contains the total and average 
 
 # Calcuate the total number of steps taken each day
 DailyActivity<-group_by(ActivityData,ActivityData$date)
-DailySummary<-summarize(DailyActivity,TotalSteps=sum(steps,na.rm=TRUE),AverageSteps=mean(steps,na.rm=TRUE))
+DailySummary<-summarize(DailyActivity,TotalSteps=sum(steps),AverageSteps=mean(steps,na.rm=TRUE))
 # Create the histogram of the total steps
 hist(DailySummary$TotalSteps,
      col="peachpuff",
@@ -39,7 +52,7 @@ legend(x="topright",
        col=c("royalblue","red"),
        lwd=c(2,2))
 ## copy the histogram to a png file
-dev.copy(png,file="figure\histogram.png",width=480,height=480)
+dev.copy(png,file="histogram.png",width=480,height=480)
 
 ## close the png device
 dev.off()
@@ -47,11 +60,11 @@ dev.off()
 
 Mean total number of steps:
 ```{r}
-mean(DailySummary$TotalSteps)
+mean(DailySummary$TotalSteps,na.rm=TRUE)
 ```
 Median total number of steps:
 ```{r}
-median(DailySummary$TotalSteps)
+median(DailySummary$TotalSteps,na.rm=TRUE)
 ```
 ## What is the average daily activity pattern?
 
@@ -73,7 +86,7 @@ abline(v=IntervalMaxSteps[1],
        lwd=2)
 
 ## copy the histogram to a png file
-dev.copy(png,file="figure\TimeSeriesPlot.png",width=480,height=480)
+dev.copy(png,file="TimeSeriesPlot.png",width=480,height=480)
 
 ## close the png device
 dev.off()
@@ -84,18 +97,92 @@ The indicator of the 5-minute interval that, on average across all the days in t
 IntervalMaxSteps
 ```
 ## Imputing missing values
-Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+The whole dataset contains the following number of missing values (i.e. the total number of rows with NAs):
 
 
-Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+```{r}
+MissingValues<-nrow(ActivityData)-nrow(ActivityData[complete.cases(ActivityData),])
+MissingValues
+```
 
-Create a new dataset that is equal to the original dataset but with the missing data filled in.
+In order to cope with the problem of missing values we fill in the missing values with the mean for a corresponding 5-minute interval and create a new dataset.
 
-Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+```{r}
+# plug in instead of the missing values the average number of steps for a corresponding interval from the IntradailySummary dataframe
+ActivityData$steps[is.na(ActivityData$steps)]<-IntradailySummary$AverageSteps[match(ActivityData$interval[is.na(ActivityData$steps)],IntradailySummary$`ActivityData$interval`)]
+```
+
+The histogram of the total number of steps taken each day and the mean and median total number of steps taken per day are given below:
+```{r}
+# Calcuate the total number of steps taken each day
+DailyActivityNew<-group_by(ActivityData,ActivityData$date)
+DailySummaryNew<-summarize(DailyActivityNew,TotalSteps=sum(steps,na.rm=TRUE),AverageSteps=mean(steps,na.rm=TRUE))
+# Create the histogram of the total steps
+hist(DailySummaryNew$TotalSteps,
+     col="peachpuff",
+     border="black",
+     xlab="Number of steps",
+     main="Total number of steps taken per day after accounting fo misssing data")
+abline(v=mean(DailySummaryNew$TotalSteps),
+       col="royalblue",
+       lwd=2)
+abline(v=median(DailySummaryNew$TotalSteps),
+       col="red",
+       lwd=2)
+legend(x="topright",
+       c("Mean","Median"),
+       col=c("royalblue","red"),
+       lwd=c(2,2))
+## copy the histogram to a png file
+dev.copy(png,file="histogramNew.png",width=480,height=480)
+
+## close the png device
+dev.off()
+```
+
+Mean total number of steps for the new dataset:
+```{r}
+mean(DailySummaryNew$TotalSteps)
+```
+Median total number of steps for the new dataset:
+```{r}
+median(DailySummaryNew$TotalSteps)
+```
+Conclusion:  Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+As we can see from the histogram and the descriprive statistics of the total number of steps taken per day our strategy of filling in the missing data introduces the downward bias in the estimates of the meadian total daily number of steps and the upward bias in the estimates of the mean 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+The following part of the code creates a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+```{r}
+# create a new variable that shows whether the corresponding day is the weekend or not in the new dataframe with filled in missing data 
+#create a vector of weekdays
+weekdaysnames <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+ActivityData$day<-factor((weekdays(ActivityData$date) %in% weekdaysnames), 
+         levels=c(FALSE, TRUE), labels=c('weekend', 'weekday')) 
+```
+
+
+Below we provide a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis) to represent how the activity patterns differ between weekdays and weekends.
+```{r}
+
+# Calcuate the average number of steps taken within 5-minute intervals for weekdays and for weekends
+IntradailyActivity<-group_by(ActivityData,ActivityData$day, ActivityData$interval)
+IntradailySummary<-summarize(IntradailyActivity,AverageSteps=mean(steps,na.rm=TRUE))
+
+
+# Create the time series plot of the average number of steps
+
+xyplot(IntradailySummary$AverageSteps~IntradailySummary$`ActivityData$interval`|factor(IntradailySummary$`ActivityData$day`),
+       type='l',layout=c(1,2),
+       xlab='Interval',ylab='Number of Steps')
+
+## copy the histogram to a png file
+dev.copy(png,file="WeekPattern.png",width=480,height=480)
+
+## close the png device
+dev.off()
+```
