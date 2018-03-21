@@ -57,6 +57,7 @@ dev.copy(png,file="histogram.png",width=480,height=480)
 ## close the png device
 dev.off()
 ```
+![Histogram](histogram.png)
 
 Mean total number of steps:
 ```{r}
