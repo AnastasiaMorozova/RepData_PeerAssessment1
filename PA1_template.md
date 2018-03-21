@@ -3,8 +3,8 @@ title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
     keep_md: true
-```
-## Loading and preprocessing the data  
+---
+# Loading and preprocessing the data  
 This part of the code attaches the dplyr library, reads the data from the .csv file and saves it as the dataframe. For the sake of the futher analysis I change the format of the "date" variable to the POSIXct date format. 
 ```{r}
 # set working directories and load necessary libraries
