@@ -128,14 +128,16 @@ dev.off()
 ##   2
 ```
 ![](figures/histogram.png)<!-- -->
-
+  
+  
 ##Mean total number of steps:
 
 ```r
 mean1<-mean(DailySummary$TotalSteps,na.rm=TRUE)
 ```
 9354.2295082
-
+  
+  
 ##Median total number of steps:
 
 ```r
@@ -185,7 +187,8 @@ dev.off()
 ##   2
 ```
 ![](figures/TimeSeriesPlot.png)<!-- -->
-
+  
+  
 ##The indicator of the 5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps:
 
 ```r
