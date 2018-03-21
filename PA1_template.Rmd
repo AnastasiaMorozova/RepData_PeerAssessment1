@@ -57,7 +57,7 @@ dev.copy(png,file="histogram.png",width=480,height=480)
 ## close the png device
 dev.off()
 ```
-![Histogram](histogram.png)
+![Picture 1](figures/histogram.png)
 
 Mean total number of steps:
 ```{r}
@@ -92,6 +92,8 @@ dev.copy(png,file="TimeSeriesPlot.png",width=480,height=480)
 ## close the png device
 dev.off()
 ```
+
+![Picture 2](figures/TimeSeriesPlot.png)
 
 The indicator of the 5-minute interval that, on average across all the days in the dataset, contains the maximum number of steps:
 ```{r}
@@ -140,6 +142,8 @@ dev.copy(png,file="histogramNew.png",width=480,height=480)
 ## close the png device
 dev.off()
 ```
+![Picture 3](figures/histogramNew.png)
+
 
 Mean total number of steps for the new dataset:
 ```{r}
@@ -187,3 +191,4 @@ dev.copy(png,file="WeekPattern.png",width=480,height=480)
 ## close the png device
 dev.off()
 ```
+![Picture 4](figures/WeekPattern.png)
